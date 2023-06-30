@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load my_filter %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+<div class="header mt-5 mb-4 d-flex align-items-center justify-content-between">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a
+                    href="{% if request.user.profile_set.first.level == 'casher' %}{% url 'app:home' %}{% elif request.user.profile_set.first.level == 'teacher'%}{% url 'app:teacher-home' %}{% endif %}">Bosh
+                    sahifa</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Obuna tarixi</li>
+        </ol>
+    </nav>
+
+    <span>
+        <input type="text" placeholder="Qidirish" id="search" class="search">
+        {% if request.user.profile_set.first.level == 'casher' %}
+        <a href="{% url 'app:datas' %}" class="btn btn-sm btn-success">Guruhlar</a>
+        {% endif %}
+    </span>
+</div>
+
+<style>
+    .check-card{
+        padding: 30px;
+        border: 1px dashed #c5c5c5;
+        background-color: white;
+    }
+    .custom-card-title{
+        font-size: 18px;
+        margin: 10px 0px;
+    }
+    .text-sm{
+        margin-top: 25px;
+        font-size: 14px;
+        font-weight: bold;
+        margin-bottom: 5px;
+        color: #858585;
+    }
+</style>
+
+<h2>Obuna tarixi</h2>
+{% if subs %}
+<div class="row mt-3">
+    <div class="col-sm-12 check-card">
+        <div class="custom-card-title">Talaba : {{student.name}}</div>
+        <div class="custom-card-title">Guruh nomi : {{group.name}}</div>
+        {% if group.teacher %}
+        <div class="custom-card-title">O'qituvchi : {{group.teacher.name}}</div>
+
+        {% endif %}
+
+        <div class="custom-card-title">Miqdori : {{subs.first.cost|intcomma}} so'm</div>
+        <div class="custom-card-title text-success">Holat : Ushbu oyda {{group.name}} uchun to'lov to'langan</div>
+
+    </div>
+</div>
+{% else %}
+<div class="row mt-3">
+    <div class="col-sm-12 check-card">
+        <div class="custom-card-title">Talaba : {{student.name}}</div>
+        <div class="custom-card-title">Guruh nomi : {{group.name}}</div>
+        {% if group.teacher %}
+        <div class="custom-card-title">O'qituvchi : {{group.teacher.name}}</div>
+
+        {% endif %}
+        <div class="custom-card-title text-danger">Holat : Ushbu oyda {{group.name}} uchun to'lov to'lanmagan</div>
+
+        <form action="" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="group" value="{{group.id}}">
+            <label for="" class="text-sm">Ushbu oy uchun to'lov qilish</label>
+            <input type="number" name="cost" class="form-control" placeholder="Oylik to'lov miqdori {{group.cost|intcomma}} so'm">
+            <button class="btn btn-success mt-3">Tasdiqlash</button>
+
+        </form>
+
+    </div>
+    <div class="col-sm-12">
+
+    </div>
+</div>
+{% endif %}
+
+
+
+{% endblock content %}

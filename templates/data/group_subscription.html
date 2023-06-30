@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+<div class="header mt-5 mb-4 d-flex align-items-center justify-content-between">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% if request.user.profile_set.first.level == 'admin' %}{% url 'app:admin-home' %}{%else%}{% url 'app:admin-home' %}{% endif %}">Bosh sahifa</a></li>
+
+        <li class="breadcrumb-item active" aria-current="page">{{group.name}}</li>
+      </ol>
+    </nav>
+</div>
+
+<table class="table table-responsive table-bordered">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>F.I.Sh.</th>
+        <th>Summa</th>
+        <th>Sana</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for s in subscriptions %}
+    <tr class="align-middle">
+        <td>{{ forloop.counter }}</td>
+        <td>{{ s.student }}</td>
+        <td>{{ s.cost|intcomma }} so'm</td>
+        <td>{{ s.month }}</td>
+    </tr>
+    {% endfor %}
+    <tr class="notfound text-center text-danger">
+        <td colspan="5">Topilmadi \:(</td>
+    </tr>
+    </tbody>
+</table>
+
+{% endblock content %}

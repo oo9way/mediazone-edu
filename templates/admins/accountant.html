@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="header mt-5 mb-4 d-flex align-items-center justify-content-between">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'app:admin-home' %}">Bosh sahifa</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Hisobchi</li>
+      </ol>
+    </nav>
+</div>
+
+<form action="" method="post">
+    {% csrf_token %}
+    <div class="custom-card bg-white">
+      <h3>Hisobchilarni ro'yxatga olish</h3>
+      
+      <div class="form-group mb-3 mt-3">
+        <label for="name">F.I.Sh.</label>
+        <input type="text" required name="name" class="form-control" placeholder="Ism, familiya">
+      </div>
+
+      <div class="form-group mb-3">
+        <label for="phone">Telefon</label>
+        <input type="text" required name="phone" class="form-control" placeholder="Telefon raqam - 918883322 formatida">
+      </div>
+
+      <div class="form-group mb-3">
+        <label for="password">Parol</label>
+        <input type="text" required name="password" class="form-control" placeholder="Kabinet uchun parol">
+      </div>
+
+      <button type="button" class="btn btn-secondary" onclick="window.history.back()">Ortga qaytish</button>
+      <button class="btn btn-primary">Saqlash</button>
+    </div>
+    
+</form>
+
+<script>
+    $(document).ready(function() {
+    $('.js-example-basic-multiple').select2();
+});
+</script>
+{% endblock content %}

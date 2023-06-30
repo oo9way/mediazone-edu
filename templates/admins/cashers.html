@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="header mt-5 mb-4 d-flex align-items-center justify-content-between">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% if request.user.profile_set.first.level == 'admin' %}{% url 'app:admin-home' %}{%else%}{% url 'app:admin-home' %}{% endif %}">Bosh sahifa</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Hisobchilar</li>
+      </ol>
+    </nav>
+
+    <span>
+        <input type="text" placeholder="Qidirish"  id="search" class="search">
+        <a href="{% url 'app:admin-create-accountant' %}" class="btn btn-sm btn-success">Hisobchi kiritish</a>
+
+    </span>
+</div>
+
+<table class="table table-responsive table-bordered">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>F.I.Sh.</th>
+        <th>Telefon</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for accountant in cashers %}
+    <tr class="align-middle">
+        <td>{{ forloop.counter }}</td>
+        <td>{{ accountant.name }}</td>
+        <td>{{ accountant.phone }}</td>
+       
+        <td>
+            <a href="{% url 'app:admin-edit-casher' accountant.id %}">
+                <span class="badge-sm badge bg-success">O'zgartirsh</span>
+            </a>
+            <a href="{% url 'app:admin-delete-casher' accountant.id %}">
+                <span class="badge-sm badge bg-danger">O'chirish</span>
+            </a>
+        </td>
+    </tr>
+    {% endfor %}
+    <tr class="notfound text-center text-danger">
+        <td colspan="5">Topilmadi \:(</td>
+    </tr>
+    </tbody>
+</table>
+
+{% endblock content %}

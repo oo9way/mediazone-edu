@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% load mathfilters %}
+
+{% block content %}
+<div class="header mt-5 mb-4 d-flex align-items-center justify-content-between">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'app:home' %}">Bosh sahifa</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Guruhlar</li>
+      </ol>
+    </nav>
+
+    <span>
+        <input type="text" placeholder="Qidirish"  id="search" class="search">
+        <a href="{% url 'app:create-group' %}" class="btn btn-sm btn-success">Guruh ochish</a>
+        <a href="{% url 'app:teachers' %}" class="btn btn-sm btn-success">O'qituvchilar</a>
+        <a href="{% url 'app:create-student' %}" class="btn btn-sm btn-success">Talaba kiritish</a>
+
+    </span>
+</div>
+
+<div class="row mb-5 mt-5">
+    <div class="col-sm-4">
+        <div class="custom-card bg-light ">
+            <h5>Hozirda</h5>
+            <h1>{{date|date:"d-F, Y"}}</h1>
+        </div>
+    </div>
+
+    <div class="col-sm-4">
+        <div class="custom-card bg-light ">
+            <h5>To'lov qilmagan o'quvchilar</h5>
+            <h1>{{unpayed|intcomma}}</h1>
+        </div>
+    </div>
+
+    <div class="col-sm-4">
+        <div class="custom-card bg-light ">
+            <h5>Guruhlar</h5>
+            <h1>{{groups.count|intcomma}}</h1>
+        </div>
+    </div>
+
+    
+</div>
+
+<table class="table table-responsive table-bordered">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Guruh nomi</th>
+        <th>O'qituvchi</th>
+        <th>O'quvchilar soni</th>
+        <th>To'lov qilinmagan</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for group in groups %}
+    <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ group.name }}</td>
+        <td>{% if group.teacher and group.teacher.is_active %} {{ group.teacher }} {% else %} - {% endif %}</td>
+        <td>{{ group.students.count }}</td>
+        <td>
+            {% if group.subscription_count == 0 %}
+                {{ group.students.count }}
+            {% else %}
+                {{ group.students.count|sub:group.subscription_count}}
+            {% endif %}
+        </td>
+        <td>
+            <a href="{% url 'app:group' group.id %}">
+                <span class="badge-sm badge bg-primary">Ko'rish</span>
+            </a>
+            <a href="{% url 'app:edit-group' group.id %}">
+                <span class="badge-sm badge bg-success">O'zgartirsh</span>
+            </a>
+            <a href="{% url 'app:delete-group' group.id %}">
+                <span class="badge-sm badge bg-danger">O'chirish</span>
+            </a>
+        </td>
+    </tr>
+    {% endfor %}
+    <tr class="notfound text-center text-danger">
+        <td colspan="5">Topilmadi \:(</td>
+    </tr>
+    </tbody>
+</table>
+
+{% endblock content %}

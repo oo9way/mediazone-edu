@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<style>
+    form ul li {
+        color: #444;
+    }
+
+    form ul li::before {
+        content: '- ';
+    }
+</style>
+<div class="header mt-5 mb-4 d-flex align-items-center justify-content-between">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'app:admin-home' %}">Bosh sahifa</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Sozlamalar</li>
+        </ol>
+    </nav>
+
+    <span>
+        <input type="text" placeholder="Qidirish" id="search" class="search">
+        <a href="{% url 'app:datas' %}" class="btn btn-sm btn-success">Guruhlar</a>
+        <a href="{% url 'app:create-teacher' %}" class="btn btn-sm btn-success">O'qituvchi kiritish</a>
+        <a href="{% url 'app:create-student' %}" class="btn btn-sm btn-success">Talaba kiritish</a>
+    </span>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <form action="" method="post">
+            <input type="hidden" name="action" value="info">
+            {% csrf_token %}
+            <h3 class="mt-3">Ma'lumotlarni tahrirlash</h3>
+            <div class="form-group mb-3 mt-4">
+                <label for="fullname" class="mb-1">Ism, Familiya</label>
+                <input type="text" name="fullname" value="{{request.user.profile_set.first.name}}" class="form-control"
+                    id="fullname" required>
+            </div>
+            <div class="form-group mb-3">
+                <label for="username" class="mb-1">Login</label>
+                <input type="text" name="username" value="{{request.user.username}}" class="form-control" id="username"
+                    required>
+            </div>
+            <button type="submit" class="btn btn-primary">Saqlash</button>
+        </form>
+
+    </div>
+
+    <div class="col-sm-6">
+        <form action="" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="password">
+            <h3 class="mt-3">Parolni o'zgartirish</h3>
+
+            {{form|crispy}}
+
+            <button type="submit" class="btn btn-primary">Saqlash</button>
+        </form>
+    </div>
+</div>
+
+<hr>
+<a href="{% url 'app:home' %}" class="btn btn-secondary">Ortga qaytish</a>
+
+
+{% endblock content %}

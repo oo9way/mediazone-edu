@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="header mt-5 mb-4 d-flex align-items-center justify-content-between">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'app:home' %}">Bosh sahifa</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{page_name}}</li>
+      </ol>
+    </nav>
+</div>
+
+<form action="" method="post">
+    {% csrf_token %}
+    Siz <b>{{group.name}}</b>ni o'chirmoqchimisiz? <br>
+    <div class="mt-2">
+      <button type="button" class="btn btn-secondary btn-sm" onclick="window.history.back()">Ortga qaytish</button>
+      <button class="btn btn-danger btn-sm">O'chirish</button>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function() {
+    $('.js-example-basic-multiple').select2();
+});
+</script>
+{% endblock content %}

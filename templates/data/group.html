@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="header mt-5 mb-4 d-flex align-items-center justify-content-between">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'app:home' %}">Bosh sahifa</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'app:datas' %}">Guruhlar</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{group.name}}</li>
+        </ol>
+    </nav>
+
+    <span>
+        <input type="text" placeholder="Qidirish" id="search" class="search">
+        <a href="{% url 'app:datas' %}" class="btn btn-sm btn-success">Guruhlar</a>
+        <a href="{% url 'app:create-teacher' %}" class="btn btn-sm btn-success">O'qituvchi kiritish</a>
+        <a href="{% url 'app:create-student' %}" class="btn btn-sm btn-success">Talaba kiritish</a>
+
+    </span>
+</div>
+
+<a href="{% url 'app:print-group' group.id %}" target="_blank" class="btn btn-primary btn-sm">Barkodlarni chop etish</a>
+<table class="table table-responsive table-bordered mt-2">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>F.I.Sh.</th>
+            <th>Holat</th>
+            <th>Telefon</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for student in group.students.all %}
+        <tr class="align-middle">
+            <td>{{ forloop.counter }}</td>
+            <td>{{ student.name }}</td>
+            <td>
+                {% if check_status %}
+                    {% if student in check_status %}
+                        <span class="badge badge-sm bg-success">To'lov qilingan</span>
+                    {% else %}
+                        <span class="badge badge-sm bg-danger">To'lov qilinmagan</span>
+                    {% endif %}
+                {% else %}
+                    <span class="badge badge-sm bg-danger">To'lov qilinmagan</span>
+                {% endif %}
+            </td>
+            <td>{{ student.phone }}</td>
+            
+            <td>
+                <a href="{% url 'app:edit-student' student.id %}">
+                    <span class="badge-sm badge bg-success">O'zgartirsh</span>
+                </a>
+                <a href="{% url 'app:delete-student' student.id %}">
+                    <span class="badge-sm badge bg-danger">O'chirish</span>
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+        <tr class="notfound text-center text-danger">
+            <td colspan="5">Topilmadi \:(</td>
+        </tr>
+    </tbody>
+</table>
+
+{% endblock content %}

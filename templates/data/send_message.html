@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+<div class="header mt-5 mb-4 d-flex align-items-center justify-content-between">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'app:home' %}">Bosh sahifa</a></li>
+            <li class="breadcrumb-item active" aria-current="page">SMS Baho</li>
+        </ol>
+    </nav>
+
+    <span>
+        <input type="text" placeholder="Qidirish" id="search" class="search">
+       {% if request.user.profile_set.first.level == 'casher' %}
+        <a href="{% url 'app:datas' %}" class="btn btn-sm btn-success">Guruhlar</a>
+        <a href="{% url 'app:create-teacher' %}" class="btn btn-sm btn-success">O'qituvchi kiritish</a>
+        <a href="{% url 'app:create-student' %}" class="btn btn-sm btn-success">Talaba kiritish</a>
+       {% endif %}
+
+    </span>
+</div>
+
+{% if request.user.profile_set.first.company.companysettings_set.first.mark %}
+<form action="" method="post">
+    {% csrf_token %}
+    <table class="table table-responsive table-bordered mt-2">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>F.I.Sh.</th>
+                <th>Kechikgan daqiqa</th>
+                <th>Telefon</th>
+                <th>Baho</th>
+                <th>Xabar matni</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for student in group.students.all %}
+            <tr class="align-middle">
+                <td>{{ forloop.counter }}</td>
+                <td>
+                    {{ student.name }}
+                    <input type="hidden" name="student{{forloop.counter}}" value="{{student.id}}">
+                </td>
+                <td><input type="text" style="width: 140px;" onchange="disableBtn()" class="form-control"
+                        id="time{{forloop.counter}}"></td>
+                <td> <input type="tel" name="tel{{forloop.counter}}" value="{{student.phone}}" class="form-control">
+                </td>
+                <td>
+                    <select onchange="disableBtn()" class="form-control" id="i{{forloop.counter}}">
+                        <option value="">Bahoni tanlang</option>
+                        <option value="5">5</option>
+                        <option value="4">4</option>
+                        <option value="3">3</option>
+                        <option value="2">2</option>
+                        <option value="1">1</option>
+                    </select>
+                </td>
+                <td>
+                    <input type="hidden" id="h{{forloop.counter}}"
+                        value="Assalomu alaykum, farzandingiz {{student.name}} bugun ">
+                    <input name="t{{forloop.counter}}" id="t{{forloop.counter}}" class="form-control form-control-sm">
+                </td>
+            </tr>
+            <input type="hidden" name="counter" value="{{forloop.counter}}">
+            <script> var finish = "{{forloop.counter}}"; </script>
+            {% endfor %}
+            <tr class="notfound text-center text-danger">
+                <td colspan="5">Topilmadi \:(</td>
+            </tr>
+        </tbody>
+    </table>
+    <button type="button" class="btn btn-secondary" onclick="window.history.back()">Ortga qaytish</button>
+    <button type="button" id="refreshBtn" class="btn btn-primary btn-rounded" onclick="refresh()">Yangilash</button>
+    <button type="submit" class="btn btn-success btn-rounded">Yuborish</button>
+</form>
+{% else %}
+<div class="text-center text-danger">Baho uchun sms yuborish <b>Administrator</b> tomonidan o'chirilgan</div>
+{% endif %}
+
+
+<script> 
+function refresh() 
+    { 
+        for (let index = 1; index <= finish; index++) { 
+            var inid = "i" + index; 
+            var txtid = "t" + index; 
+            var hid = "h" + index; 
+            var sid = "s" + index; 
+            var time = "time" + index; 
+            var inp = document.getElementById(inid).value; 
+            var late = document.getElementById(time).value; 
+            if (inp == "") { 
+                document.getElementById(txtid).value = document.getElementById(hid).value + "{{group.subject}} guruhida qatnashmadi. Iltimos, eʻtiboringizni kuchaytiring. Oʻqituvchi {{group.teacher.phone}}"; 
+            } else if (inp == "1" || inp == "2" || inp == "3") { 
+                if (late != "") { 
+                    document.getElementById(txtid).value = document.getElementById(hid).value + "{{group.subject}} kursida " + late + " daqiqa kech qoldi va " + inp + " baho oldi. Iltimos, eʻtiboringizni kuchaytiring. Koʻproq birgalikda shugʻullaning. Oʻqituvchi {{group.teacher.phone}}"; 
+                } else { 
+                    document.getElementById(txtid).value = document.getElementById(hid).value + "{{group.subject}} kursida " + inp + " baho oldi. Iltimos, eʻtiboringizni kuchaytiring. Koʻproq birgalikda shugʻullaning. Oʻqituvchi {{group.teacher.phone}}"; 
+                } 
+            } else if (inp == "4") { 
+                if (late != "") { 
+                    document.getElementById(txtid).value = document.getElementById(hid).value + "{{group.subject}} kursida " + late + " daqiqa kech qoldi va " + inp + " baho oldi. Farzandingiz bilan yanada koʻproq shugʻullaning. Oʻqituvchi {{group.teacher.phone}}"; 
+                } else { 
+                    document.getElementById(txtid).value = document.getElementById(hid).value + "{{group.subject}} kursida " + inp + " baho oldi. Farzandingiz bilan yanada koʻproq shugʻullaning. Oʻqituvchi {{group.teacher.phone}}"; 
+                } 
+            } else if (inp == "5") { 
+                if (late != "") { 
+                    document.getElementById(txtid).value = document.getElementById(hid).value + "{{group.subject}} kursida " + late + " daqiqa kech qoldi va " + inp + " baho oldi.Eʻtiboringiz uchun rahmat. Oʻqituvchi {{group.teacher.phone}}"; 
+                } else { 
+                    document.getElementById(txtid).value = document.getElementById(hid).value + "{{group.subject}} kursida " + inp + " baho oldi. Eʻtiboringiz uchun rahmat. Oʻqituvchi {{group.teacher.phone}}"; 
+                } 
+            } else { 
+                document.getElementById(txtid).value = document.getElementById(hid).value + "{{group.subject}} kursida " + document.getElementById(inid).value + " baho oldi"; 
+            } 
+        } 
+        document.getElementById("refreshBtn").disabled = true; 
+    } 
+            
+function disableBtn() { 
+    document.getElementById("refreshBtn").disabled = false; 
+} 
+            
+</script>
+
+{% endblock content %}

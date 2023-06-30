@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+
+<div class="row mt-5">
+    <div class="col-sm-4"></div>
+    <div class="col-sm-4">
+        <div class="custom-card-header mt-5 h3 text-center">Edu 1.0</div>
+        <form action="" method="post">
+            {% csrf_token %}
+            <div class="p-3 bg-white rounded">
+                <div class="form-group mb-3">
+                    <label for="username" class="mb-1">Login</label>
+                    <input type="text" name="username" placeholder="Loginni kiriting" class="form-control" id="username"
+                        required>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="password" class="mb-1">Parol</label>
+                    <input type="password" name="password" placeholder="Parol" class="form-control" id="password"
+                        required>
+                </div>
+
+                {% if error_message != '' %}
+                <div class="text-danger mb-3">
+                    {{error_message}}
+                </div>
+                {% endif %}
+               
+                <button type="submit" class="btn login-btn btn-dark">Kirish</button>
+            </div>
+
+        </form>
+    </div>
+    <div class="col-sm-4"></div>
+</div>
+
+{% endblock content %}

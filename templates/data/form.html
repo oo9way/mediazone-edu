@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="header mt-5 mb-4 d-flex align-items-center justify-content-between">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'app:home' %}">Bosh sahifa</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{page_name}}</li>
+      </ol>
+    </nav>
+</div>
+
+<form action="" method="post">
+    {% csrf_token %}
+    {{form|crispy}}
+
+
+    {% if phone == True %}
+    <div class="form-group mb-3">
+      <label for="">Kabinet uchun parol*</label>
+      <input type="text" name="password" placeholder="Kabinet uchun parol yarating" required id="" class="form-control">
+    </div>
+    {% endif %}
+
+    {% if teachers %}
+    <div class="form-group mb-3">
+      <label for="">O'qituvchi*</label>
+      <select name="teacher" id="" class="form-control mt-2">
+        {% for teacher in teachers %}
+        <option value="{{teacher.id}}">{{teacher.name}}</option>
+        {% endfor %}
+      </select>
+    </div>
+    {% endif %}
+
+
+    <button class="btn btn-primary">Saqlash</button>
+</form>
+
+<script>
+    $(document).ready(function() {
+    $('.js-example-basic-multiple').select2();
+});
+</script>
+{% endblock content %}

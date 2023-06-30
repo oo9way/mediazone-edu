@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+<div class="header mt-5 mb-4 d-flex align-items-center justify-content-between">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'app:admin-settings' %}">Sozlamalar</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Parolni o'zgartirish</li>
+        </ol>
+    </nav>
+
+    <span></span>
+</div>
+
+<div class="row">
+        <div class="col-sm-12">
+            <form action="" method="post">
+                {% csrf_token %}
+                <h3 class="mt-3 mb-3">SMS sozlamalari</h3>
+                <div class="mb-3">
+                    <div class="form-check form-switch form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="attendace" {% if settings.attendace == True %} checked {% endif %}>
+                        <input type="hidden" name="attendace" id="hiddenAttendace" {% if settings.attendace == True %} value="true" {% endif %}>
+                        <label class="form-check-label" for="attendace">Davomat uchun sms</label>
+                    </div>
+
+                    <div class="form-check form-switch form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="payment" {% if settings.payment == True %} checked {% endif %}>
+                        <input type="hidden" name="payment" id="hiddenPayment" {% if settings.payment == True %} value="true" {% endif %}>
+                        <label class="form-check-label" for="payment">To'lov uchun sms</label>
+                    </div>
+
+                    <div class="form-check form-switch form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="mark" {% if settings.mark == True %} checked {% endif %}>
+                        <input type="hidden" name="mark" id="hiddenMark" {% if settings.mark == True %} value="true" {% endif %}>
+                        <label class="form-check-label" for="mark">Baholar uchun sms</label>
+                    </div>
+
+                </div>
+                
+                
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="link">Havola</label>
+                            <input class="form-control" value="{{settings.api_link}}" autocomplete="off" id="link" type="url" name="api_link" placeholder="API havolasi" >
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="originator">Originator</label>
+                            <input class="form-control" value="{{settings.originator}}" autocomplete="off" id="originator" type="text" name="originator" placeholder="Originator nomi">
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="key">Kalit</label>
+                            <input class="form-control" value="{{settings.key}}" autocomplete="off" id="key" type="password" name="key" placeholder="Kalit">
+                        </div>
+                    </div>
+                </div>
+                
+                <hr>
+
+                <a href="{% url 'manager:companies' %}" class="btn btn-secondary">Ortga qaytish</a>
+                <button type="submit" class="btn btn-primary">Saqlash</button>
+            </form>
+        </div>
+    </div>
+
+<script>
+    var attendace = document.getElementById("attendace");
+    var mark = document.getElementById("mark");
+    var payment = document.getElementById("payment");
+
+    attendace.addEventListener('change', function(){
+        if(attendace.checked){
+            document.getElementById("hiddenAttendace").value=true
+        }else{
+            document.getElementById("hiddenAttendace").value = false
+        }
+    });
+
+    mark.addEventListener('change', function () {
+        if (mark.checked) {
+            document.getElementById("hiddenMark").value = true
+        } else {
+            document.getElementById("hiddenMark").value = false
+        }
+    });
+
+    payment.addEventListener('change', function () {
+        if (payment.checked) {
+            document.getElementById("hiddenPayment").value = true
+        } else {
+            document.getElementById("hiddenPayment").value = false
+        }
+    });
+</script>
+
+{% endblock content %}

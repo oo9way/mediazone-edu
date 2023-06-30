@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% load mathfilters %}
+
+{% block content %}
+<div class="header mt-5 mb-4 d-flex align-items-center justify-content-between">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'app:home' %}">Bosh sahifa</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Guruhlar</li>
+      </ol>
+    </nav>
+
+    <span>
+        <input type="text" placeholder="Qidirish"  id="search" class="search">
+        <a href="{% url 'app:create-group' %}" class="btn btn-sm btn-success">Guruh ochish</a>
+        <a href="{% url 'app:teachers' %}" class="btn btn-sm btn-success">O'qituvchilar</a>
+        <a href="{% url 'app:create-student' %}" class="btn btn-sm btn-success">Talaba kiritish</a>
+
+    </span>
+</div>
+
+<div class="row mb-5 mt-5">
+    
+
+    <div class="col-sm-4">
+        <div class="custom-card p-3 bg-white">
+            <div class="cheque-card p-3">
+                <h3>Prime Study NTM</h3>
+                <div class="bottom-border my-3"></div>
+
+                <div>Kurs nomi : {{s.group.subject}}</div>
+                <div>Guruh nomi : {{s.group.name}}</div>
+                <div>Talaba : {{s.student.name}}</div>
+                <div>O'qituvchi : {{s.group.teacher.name}}</div>
+                <div>Telefon : {{s.student.phone}}</div>
+                <div>To'lov miqdori : {{s.cost|intcomma}} so'm</div>
+                <div>Sana : {{s.month}}</div>
+                <div>Holati : {{s.get_status_display}}</div>
+                <div class="bottom-border mt-3"></div>
+            </div>
+        </div>
+
+        <button class="btn btn-primary mt-5" onclick="window.print()">Chop etish</button>
+    </div>
+
+    
+</div>
+
+
+{% endblock content %}

@@ -1,0 +1,202 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+<div class="header mt-5 mb-4 d-flex align-items-center justify-content-between">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% if request.user.profile_set.first.level == 'casher' %}{% url 'app:home' %}{% elif request.user.profile_set.first.level == 'teacher'%}{% url 'app:teacher-home' %}{% endif %}">Bosh sahifa</a></li>
+            <li class="breadcrumb-item active" aria-current="page">O'qituvchilar</li>
+        </ol>
+    </nav>
+
+    <span>
+        <input type="text" placeholder="Qidirish" id="search" class="search">
+        {% if request.user.profile_set.first.level == 'casher' %}
+        <a href="{% url 'app:datas' %}" class="btn btn-sm btn-success">Guruhlar</a>
+        <a href="{% url 'app:create-teacher' %}" class="btn btn-sm btn-success">O'qituvchi kiritish</a>
+        {% endif %}
+
+    </span>
+</div>
+
+<div class="row mb-4">
+    <div class="col-sm-4">
+        <form action="" method="get">
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <select name="month" class="form-control" required>
+                            <option value="01">Yanvar</option>
+                            <option value="02">Fevral</option>
+                            <option value="03">Mart</option>
+                            <option value="04">Aprel</option>
+                            <option value="05">May</option>
+                            <option value="06">Iyun</option>
+                            <option value="07">Iyul</option>
+                            <option value="08">Avgust</option>
+                            <option value="09">Sentyabr</option>
+                            <option value="10">Oktyabr</option>
+                            <option value="11">Noyabr</option>
+                            <option value="12">Dekabr</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col">
+                        <button class="btn btn-success">Aniqlash</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<table class="table table-responsive table-bordered mt-2">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>F.I.Sh</th>
+            <th>Avanslar</th>
+            <th>Jarimalar</th>
+            <th>Bonuslar</th>
+            <th>Ma'lumotlar</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in teachers %}
+        <tr class="align-middle">
+            <td>{{ forloop.counter }}</td>
+            <td>{{ row.name }}</td>
+            <td>
+                {{ row.debt_balance|intcomma }} so'm
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#debt{{row.id}}">
+                    +
+                </button>
+                <a class="btn btn-sm btn-primary" href="{% url 'app:casher-teacher-history' row.id %}?type=debt&month={{month}}">Batafsil</a>
+
+                
+                <!-- Modal -->
+                <div class="modal fade" id="debt{{row.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <form action="" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="balance" value="debt">
+                                <input type="hidden" name="teacher" value="{{row.id}}">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Avans qo'shish</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group mb-3">
+                                        <label for="">Avans miqdori*</label>
+                                        <input type="text" placeholder="Avans miqdori" required  name="amount" class="form-control mt-1">
+                                    </div>
+
+                                    <div class="form-group mb-3">
+                                        <label for="">Izoh*</label>
+                                        <input type="text" placeholder="Izoh qoldiring" required name="comment" class="form-control mt-1">
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Yopish</button>
+                                    <button type="submit" class="btn btn-primary">Saqlash</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </td>
+            <td>
+                {{ row.fine_balance|intcomma }} so'm
+                <button type="button" class="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#fine{{row.id}}">
+                    +
+                </button>
+                <a class="btn btn-sm btn-primary" href="{% url 'app:casher-teacher-history' row.id %}?type=fine&month={{month}}">Batafsil</a>
+
+
+                <!-- Modal -->
+                <div class="modal fade" id="fine{{row.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <form action="" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="balance" value="fine">
+                                <input type="hidden" name="teacher" value="{{row.id}}">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Jarima qo'shish</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group mb-3">
+                                        <label for="">Jarima miqdori*</label>
+                                        <input type="text" placeholder="Jarima miqdori" required name="amount" class="form-control mt-1">
+                                    </div>
+
+                                    <div class="form-group mb-3">
+                                        <label for="">Izoh*</label>
+                                        <input type="text" placeholder="Izoh qoldiring" required name="comment"
+                                            class="form-control mt-1">
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Yopish</button>
+                                    <button type="submit" class="btn btn-primary">Saqlash</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </td>
+            <td>
+                {{ row.bonus_balance|intcomma }} so'm
+                <button type="button" class="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#bonus{{row.id}}">
+                    +
+                </button>
+                
+                <a class="btn btn-sm btn-primary" href="{% url 'app:casher-teacher-history' row.id %}?type=bonus&month={{month}}">Batafsil</a>
+                
+                <!-- Modal -->
+                <div class="modal fade" id="bonus{{row.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <form action="" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="balance" value="bonus">
+                                <input type="hidden" name="teacher" value="{{row.id}}">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Bonus qo'shish</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group mb-3">
+                                        <label for="">Bonus miqdori*</label>
+                                        <input type="text" placeholder="Bonus miqdori" required name="amount" class="form-control mt-1">
+                                    </div>
+                
+                                    <div class="form-group mb-3">
+                                        <label for="">Izoh*</label>
+                                        <input type="text" placeholder="Izoh qoldiring" required name="comment"
+                                            class="form-control mt-1">
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Yopish</button>
+                                    <button type="submit" class="btn btn-primary">Saqlash</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <a href="{% url 'app:check-teacher' row.id %}" class="btn btn-warning">Boshqa ma'lumotlar</a> 
+            </td>
+        </tr>
+        {% endfor %}
+        <tr class="notfound text-center text-danger">
+            <td colspan="5">Topilmadi \:(</td>
+        </tr>
+    </tbody>
+</table>
+
+{% endblock content %}

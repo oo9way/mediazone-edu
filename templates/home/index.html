@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+<div class="search-bar py-5">
+    <form action="" method="get">
+        <input name="id" type="text" placeholder="ID raqam" autofocus="autofocus" required>
+    </form>
+</div>
+
+{% if student == None and teacher == None %}
+<div class="text-center h4 text-danger">Ma'lumot topilmadi</div>
+{% elif student %}
+    {% if success == True %}
+    <div class="custom-card custom-bg-success">
+        <h1 class="name text-white">{{student.name}}</h1>
+        <ul class="info-list">
+            <li><b>Holati : </b> Aktiv</li>
+            <li><b>Guruhlar : </b>
+                <ul class="groups-list">
+                    {% for g in student.group_set.all %}
+                    <li>{{forloop.counter}}. {{g.name}} - {% if g.teacher %} {{g.teacher}} {% else %} hozircha belgilanmagan {% endif %} </li>
+                    {% endfor %}
+                </ul>
+            </li>
+            <li>
+                <b>Joriy yil uchun to'lovlar : </b>
+                <ul class="month-list">
+                    
+                    {% for g in student.group_set.all %}
+                        <div class="mb-2">
+                            <div class="group-names">
+                                Guruh nomi : {{g.name}}
+                            </div> 
+                            <li class='{% for d in sub_year %}{% if d.month|date:"m" == "01" and d.group.id == g.id %} payment-success {% endif %}{% endfor %}'>
+                                <a href='{% url "app:check-subscription" g.id student.id  01 %}'>Yanvar</a>
+                            </li>
+                            <li class='{% for d in sub_year %}{% if d.month|date:"m" == "02" and d.group.id == g.id %} payment-success {% endif %}{% endfor %}'>
+                                <a href='{% url "app:check-subscription" g.id student.id 02 %}'>Fevral</a>
+                            </li>
+                            <li class='{% for d in sub_year %}{% if d.month|date:"m" == "03" and d.group.id == g.id %} payment-success {% endif %}{% endfor %}'>
+                                <a href='{% url "app:check-subscription" g.id student.id 03 %}'>Mart</a>
+                            </li>
+                            <li class='{% for d in sub_year %}{% if d.month|date:"m" == "04" and d.group.id == g.id %} payment-success {% endif %}{% endfor %}'>
+                                <a href='{% url "app:check-subscription" g.id student.id 04 %}'>Aprel</a>
+                            </li>
+                            <li class='{% for d in sub_year %}{% if d.month|date:"m" == "05" and d.group.id == g.id %} payment-success {% endif %}{% endfor %}'>
+                                <a href='{% url "app:check-subscription" g.id student.id 05 %}'>May</a>
+                            </li>
+                            <li class='{% for d in sub_year %}{% if d.month|date:"m" == "06" and d.group.id == g.id %} payment-success {% endif %}{% endfor %}'>
+                                <a href='{% url "app:check-subscription" g.id student.id 06 %}'>Iyun</a>
+                            </li>
+                            <li class='{% for d in sub_year %}{% if d.month|date:"m" == "07" and d.group.id == g.id %} payment-success {% endif %}{% endfor %}'>
+                                <a href='{% url "app:check-subscription" g.id student.id 07 %}'>Iyul</a>
+                            </li>
+                            <li class='{% for d in sub_year %}{% if d.month|date:"m" == "08" and d.group.id == g.id %} payment-success {% endif %}{% endfor %}'>
+                                <a href='{% url "app:check-subscription" g.id student.id 08 %}'>Avgust</a>
+                            </li>
+                            <li class='{% for d in sub_year %}{% if d.month|date:"m" == "09" and d.group.id == g.id %} payment-success {% endif %}{% endfor %}'>
+                                <a href='{% url "app:check-subscription" g.id student.id 09 %}'>Sentyabr</a>
+                            </li>
+                            <li class='{% for d in sub_year %}{% if d.month|date:"m" == "10" and d.group.id == g.id %} payment-success {% endif %}{% endfor %}'>
+                                <a href='{% url "app:check-subscription" g.id student.id 10 %}'>Oktyabr</a>
+                            </li>
+                            <li class='{% for d in sub_year %}{% if d.month|date:"m" == "11" and d.group.id == g.id %} payment-success {% endif %}{% endfor %}'>
+                                <a href='{% url "app:check-subscription" g.id student.id 11 %}'>Noyabr</a>
+                            </li>
+                            <li class='{% for d in sub_year %}{% if d.month|date:"m" == "12" and d.group.id == g.id %} payment-success {% endif %}{% endfor %}'>
+                                <a href='{% url "app:check-subscription" g.id student.id 12 %}'>Dekabr</a>
+                            </li>
+
+                        </div>
+                    {% endfor %}
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    {% endif %}
+{% elif teacher %}
+    <div class="custom-card custom-bg-primary">
+        <h1>Xush kelibsiz, {{teacher.name}}</h1>
+        <div><b>Status:</b> davomat uchun kiritildi</div>
+    </div>
+{% endif %}
+
+
+
+{% if success == False %}
+<div class="custom-card custom-bg-danger">
+    <h1 class="name text-white">{{student.name}} - {{student.phone}}</h1>
+    <ul class="info-list">
+        <li><b>Holati : </b> Aktiv</li>
+        <li><b>Guruhlar : </b>
+            <ul class="groups-list">
+                {% for g in student.group_set.all %}
+                <li>{{forloop.counter}}. {{g.name}} - {% if g.teacher %} {{g.teacher}} {% else %} hozircha belgilanmagan {% endif %}
+                </li>
+                {% endfor %}
+            </ul>
+        </li>
+
+        
+        <li>
+            <b>Joriy yil uchun to'lovlar : </b>
+            <ul class="month-list">
+        
+                {% for g in student.group_set.all %}
+                <div class="mb-2">
+                    <div class="group-names">
+                        Guruh nomi : {{g.name}}
+                    </div>
+                    <li
+                        class='{% for d in sub_year %}{% if d.month|date:"m" == "01" and d.group.id == g.id %} payment-success {% endif %}{% endfor %}'>
+                        <a href='{% url "app:check-subscription" g.id student.id  01 %}'>Yanvar</a>
+                    </li>
+                    <li
+                        class='{% for d in sub_year %}{% if d.month|date:"m" == "02" and d.group.id == g.id %} payment-success {% endif %}{% endfor %}'>
+                        <a href='{% url "app:check-subscription" g.id student.id  02 %}'>Fevral</a>
+                    </li>
+                    <li
+                        class='{% for d in sub_year %}{% if d.month|date:"m" == "03" and d.group.id == g.id %} payment-success {% endif %}{% endfor %}'>
+                        <a href='{% url "app:check-subscription" g.id student.id  03 %}'>Mart</a>
+                    </li>
+                    <li
+                        class='{% for d in sub_year %}{% if d.month|date:"m" == "04" and d.group.id == g.id %} payment-success {% endif %}{% endfor %}'>
+                        <a href='{% url "app:check-subscription" g.id student.id  04 %}'>Aprel</a>
+                    </li>
+                    <li
+                        class='{% for d in sub_year %}{% if d.month|date:"m" == "05" and d.group.id == g.id %} payment-success {% endif %}{% endfor %}'>
+                        <a href='{% url "app:check-subscription" g.id student.id  05 %}'>May</a>
+                    </li>
+                    <li
+                        class='{% for d in sub_year %}{% if d.month|date:"m" == "06" and d.group.id == g.id %} payment-success {% endif %}{% endfor %}'>
+                        <a href='{% url "app:check-subscription" g.id student.id  06 %}'>Iyun</a>
+                    </li>
+                    <li
+                        class='{% for d in sub_year %}{% if d.month|date:"m" == "07" and d.group.id == g.id %} payment-success {% endif %}{% endfor %}'>
+                        <a href='{% url "app:check-subscription" g.id student.id  07 %}'>Iyul</a>
+                    </li>
+                    <li
+                        class='{% for d in sub_year %}{% if d.month|date:"m" == "08" and d.group.id == g.id %} payment-success {% endif %}{% endfor %}'>
+                        <a href='{% url "app:check-subscription" g.id student.id  08 %}'>Avgust</a>
+                    </li>
+                    <li
+                        class='{% for d in sub_year %}{% if d.month|date:"m" == "09" and d.group.id == g.id %} payment-success {% endif %}{% endfor %}'>
+                        <a href='{% url "app:check-subscription" g.id student.id  09 %}'>Sentyabr</a>
+                    </li>
+                    <li
+                        class='{% for d in sub_year %}{% if d.month|date:"m" == "10" and d.group.id == g.id %} payment-success {% endif %}{% endfor %}'>
+                        <a href='{% url "app:check-subscription" g.id student.id  10 %}'>Oktyabr</a>
+                    </li>
+                    <li
+                        class='{% for d in sub_year %}{% if d.month|date:"m" == "11" and d.group.id == g.id %} payment-success {% endif %}{% endfor %}'>
+                        <a href='{% url "app:check-subscription" g.id student.id  11 %}'>Noyabr</a>
+                    </li>
+                    <li
+                        class='{% for d in sub_year %}{% if d.month|date:"m" == "12" and d.group.id == g.id %} payment-success {% endif %}{% endfor %}'>
+                        <a href='{% url "app:check-subscription" g.id student.id  12 %}'>Dekabr</a>
+                    </li>
+        
+                </div>
+                {% endfor %}
+            </ul>
+        </li>
+    </ul>
+
+    <form action="" method="post" class="mt-3 text-white">
+        {% csrf_token %}
+        <div class="custom-form-group">
+            <div class="custom-form-label">Guruhlar uchun to'lov qilish</div>
+            <input type="hidden" name="amount" value="{{unpayed|length}}">
+            {% for g in unpayed %}
+            <div>
+                <label for="" class="group-names"><b>Guruh: </b>{{g.name}} | <b>O'qituvchi: </b>{% if g.teacher %} {{g.teacher}} {% else %} Kiritilmagan {% endif %}</label>
+                <input type="hidden" name="group{{forloop.counter}}" value="{{g.id}}">
+                <input type="text" name="sum{{forloop.counter}}" class="custom-form-control" placeholder="Kurs narxi {{g.cost|intcomma}} so'm">
+            </div>
+            {% endfor %}
+
+        </div>
+        <button class="custom-btn mt-2" type="submit">Tasdiqlash</button>
+    </form>
+</div>
+{% endif %}
+
+
+{% endblock content %}

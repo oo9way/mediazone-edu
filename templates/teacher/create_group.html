@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="header mt-5 mb-4 d-flex align-items-center justify-content-between">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'app:home' %}">Bosh sahifa</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{page_name}}</li>
+        </ol>
+    </nav>
+</div>
+
+<h3>Guruh ochish</h3>
+<form action="" method="post">
+    {% csrf_token %}
+    <div class="form-group mb-3 mt-3">
+        <label for="group_name">Guruh nomi</label>
+        <input type="text" name="group_name" id="group_name" class="form-control" required>
+    </div>
+    <div class="form-group mb-3">
+        <label for="group_cost">Narxi</label>
+        <input type="text" name="group_cost" id="group_cost" class="form-control" required>
+    </div>
+    <div class="form-group mb-3">
+        <label for="group_subject">Fan</label>
+        <select name="group_subject" id="group_subject" class="form-control">
+            {% for s in subjects %}
+            <option value="{{s.id}}">{{s.name}}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <button type="button" class="btn btn-secondary" onclick="window.history.back()">Ortga qaytish</button>
+    <button class="btn btn-primary">Saqlash</button>
+</form>
+
+<script>
+    $(document).ready(function () {
+        $('.js-example-basic-multiple').select2();
+    });
+</script>
+{% endblock content %}

@@ -1,0 +1,52 @@
+
+{% load mathfilters %}
+{% if request.user.is_authenticated %}
+{% if request.user.is_staff == False %}
+{% if active_days != True and active_days < 6 %}
+<div class="subscribe-alert navbar-subscribe px-3">
+    <div class="text p-2">
+        "Sizning obuna muddatingiz tugagan. Agar {{ 5|sub:active_days }} kun ichida to'lov qilinmasa, dastur bloklanadi. Qayta obuna bo'lish uchun Administratorga
+        murojaat qiling.
+        <b>Telefon:</b> {{manager.phone}} | <b class="pl-5">Telegram : </b><a
+            href="https://t.me/{{manager.phone}}">{{manager.name}}</a> "
+    </div>
+</div>
+{% endif %}
+{% endif %}
+<div class="custom-navbar">
+    
+    <div class="container cs-navbar">
+        <div  class="text-white navbar-brand"><a href="https://www.edu.mediazone.uz"> MediaZone</a></div>
+        {% if request.user.profile_set.first.is_manager == True %}
+        <a href="{% url 'manager:companies' %}">Abonentlar</a>
+        <a href="{% url 'manager:subscriptions' %}">Obunalar tarixi</a>
+        <a href="{% url 'manager:settings' %}">Sozlamalar</a>
+        <a href="{% url 'app:logout' %}">Chiqish</a>
+        
+        {% elif request.user.profile_set.first.level == 'teacher' %}
+        <a href="{% url 'app:teacher-home' %}">Bosh sahifa</a>
+        <a href="{% url 'app:logout' %}">Chiqish</a>
+        {% elif request.user.profile_set.first.level == 'casher' %}
+        <a href="{% url 'app:home' %}">Bosh sahifa</a>
+        <a href="{% url 'app:datas' %}">Ma'lumotlar</a>
+        <a href="{% url 'app:casher-teachers' %}">O'qituvchilar</a>
+        <a href="{% url 'app:expenses' %}">Harajatlar</a>
+        <a href="{% url 'app:history' %}">Tarix</a>
+        <a href="{% url 'app:message-groups' %}">SMS Baho</a>
+        <a href="{% url 'app:settings' %}">Sozlamalar</a>
+        <a href="{% url 'app:logout' %}">Chiqish</a>
+        {% elif request.user.profile_set.first.level == 'admin' %}
+        <a href="{% url 'app:admin-home' %}">Bosh sahifa</a>
+        <a href="{% url 'app:casher-teachers' %}">O'qituvchilar</a>
+        <a href="{% url 'app:expenses' %}">Harajatlar</a>
+        <a href="{% url 'app:history' %}">Tarix</a>
+        <a href="{% url 'app:admin-cashers' %}">Hisobchilar</a>
+        <a href="{% url 'app:admin-settings' %}">Sozlamalar</a>
+        <a href="{% url 'app:admin-profile' %}">Profile</a>
+        <a href="{% url 'app:logout' %}">Chiqish</a>
+        
+        {% endif %}
+    </div>
+</div>
+
+{% endif %}

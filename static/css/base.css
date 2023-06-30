@@ -1,0 +1,299 @@
+* {
+    font-family: 'Poppins';
+    letter-spacing: .6px;
+}
+
+body {
+    background-color: #EDF2F4;
+}
+
+.custom-navbar {
+    background-color: #2B2D42;
+}
+
+.cs-navbar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.navbar-brand a {
+    text-decoration: none;
+    color: white;
+}
+
+.cs-navbar a:not(:first-child) {
+    font-size: 12px;
+    text-decoration: none;
+    padding: 15px;
+    color: white;
+    transition: background .3s;
+}
+
+.cs-navbar a:not(:first-child):hover {
+    background-color: white;
+    color: #2B2D42;
+}
+
+.search-bar {
+    width: 100%;
+}
+
+.search-bar input {
+    padding: 15px 25px;
+    font-size: 12px;
+    width: 100%;
+    outline: none;
+    background: transparent;
+    border: 1px solid #8D99AE;
+    border-radius: 50px;
+}
+
+.custom-card {
+    width: 100%;
+    height: 100%;
+    padding: 30px;
+    border-radius: 15px;
+}
+
+.custom-bg-success {
+    background-color: #06D6A0;
+}
+
+.custom-bg-danger {
+    background-color: #EF476F;
+}
+
+.name {
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+
+ul,
+ul li {
+    color: white;
+    padding: 0;
+    margin: 0;
+}
+
+ul li {
+    list-style: none;
+    padding-left: 8px
+}
+
+.info-list>li {
+    padding: 8px 0;
+}
+
+.info-list>li:last-child {
+    margin-top: 20px;
+}
+
+.month-list li:first-child {
+    margin-top: 5px;
+}
+
+.month-list li {
+    display: inline-block;
+    padding: 3px 15px;
+    color: black;
+    font-size: 10px;
+    background-color: white;
+    border-radius: 15px;
+}
+
+.payment-success {
+    background-color: #ffd166 !important;
+}
+
+.month-list li a {
+    text-decoration: none;
+    color: black
+}
+
+.custom-form-label {
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+.custom-form-control {
+    width: 100%;
+    font-size: 14px;
+    padding: 8px 10px;
+    border-radius: 15px;
+    border: none;
+    padding-right: 25px;
+    outline: none;
+}
+
+.custom-form-group {
+    margin: 10px 0px;
+}
+
+.custom-btn {
+    border-radius: 30px;
+    padding: 5px 20px;
+    border: none;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.badge {
+    font-weight: 400 !important;
+}
+
+.notfound {
+    display: none;
+}
+
+.search {
+    outline: none;
+    width: 220px;
+    border: none;
+    padding: 5px 10px;
+}
+
+
+.messages {
+    list-style: none;
+    position: absolute;
+    top: 0px;
+    right: 10px;
+}
+
+.alert {
+    width: 350px;
+    position: absolute;
+    top: 20px;
+    right: 10px;
+    border: none;
+    box-shadow: 5px 5px 15px #c7c7c7;
+    animation: hideAlert 4s ease both;
+    overflow: hidden;
+    line-break: strict;
+    font-weight: 500;
+    z-index: 5;
+}
+
+.alert-danger {
+    background-color: #ef476f;
+    color: white;
+}
+
+.alert-success {
+    background-color: #06d6a0;
+    color: white;
+}
+
+.custom-bg-primary {
+    background-color: #a2d2ff;
+}
+
+@keyframes hideAlert {
+    0% {
+        opacity: 0;
+    }
+
+    15% {
+        opacity: 1;
+    }
+
+    80% {
+        opacity: 1;
+    }
+
+    90% {
+        opacity: 0;
+    }
+
+    100% {
+        pointer-events: none;
+        opacity: 0;
+
+    }
+}
+
+.barcode {
+    width: 150px;
+}
+
+.group-names {
+    font-size: 13px;
+}
+
+.cheque-card {
+    width: 100%;
+    height: 360px;
+    border: 1px #ededed solid;
+    border-bottom: 0;
+    background-image: url('data:image/svg+xml;utf8, <svg viewBox="0 0 200 110" xmlns="http://www.w3.org/2000/svg"><path d="M -15 110 L100 10 L215 110" fill="none" stroke="%23ededed" stroke-width="4" vector-effect="non-scaling-stroke"/></svg>');
+    background-position: bottom left;
+    background-size: 10% auto;
+    background-repeat: repeat-x;
+}
+
+.cheque-card>div {
+    font-family: "JetBrains Mono";
+    line-height: 26px;
+}
+
+.cheque-card>.bottom-border {
+    width: 100%;
+    height: 2px;
+    border-bottom: 1px black dashed;
+}
+
+.custom-card-header {
+    width: 100%;
+    padding: 15px;
+    border-radius: 5px;
+    background-color: #2B2D42;
+    color: white;
+}
+
+.login-btn {
+    background-color: #2B2D42;
+    color: white;
+}
+
+.subscribe-alert {
+    background-color: #ef476e50;
+    border-radius: 10px;
+    border: 1px solid #f56184;
+    color: #ef476f;
+    font-weight: 400;
+}
+
+.navbar-subscribe {
+    border-radius: 0;
+    border: none;
+    font-size: 12px;
+}
+
+.select2-selection__rendered {
+    color: #333;
+}
+
+.select2-results__option {
+    color: #333;
+}
+
+.select2-selection__choice__display {
+    background-color: #457b9d;
+    border: none !important;
+}
+
+.select2-selection__choice__remove {
+    background-color: #1d3557 !important;
+    border: none !important;
+}
+
+.select2-selection__choice__remove span {
+    color: white;
+    border: none !important;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+    border: none !important;
+}

@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="header mt-5 mb-4 d-flex align-items-center justify-content-between">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% if request.user.profile_set.first.level == 'admin' %}{% url 'app:admin-home' %}{%else%}{% url 'app:admin-home' %}{% endif %}">Bosh sahifa</a></li>
+
+        <li class="breadcrumb-item active" aria-current="page">O'qituvchilar</li>
+      </ol>
+    </nav>
+
+    <span>
+        <input type="text" placeholder="Qidirish" id="search" class="search">
+        {% if request.user.profile_set.first.level == 'admin' %}
+        <a href="{% url 'app:admin-create-teacher' %}" class="btn btn-sm btn-success">O'qituvchi kiritish</a>
+        {% endif %}
+        {% if request.user.profile_set.first.level == 'casher'%}
+        <a href="{% url 'app:datas' %}" class="btn btn-sm btn-success">Guruhlar</a>
+        <a href="{% url 'app:create-teacher' %}" class="btn btn-sm btn-success">O'qituvchi kiritish</a>
+        <a href="{% url 'app:create-student' %}" class="btn btn-sm btn-success">Talaba kiritish</a>
+        {% endif %}
+    </span>
+</div>
+
+<table class="table table-responsive table-bordered">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>F.I.Sh.</th>
+        <th>Telefon</th>
+        <th>Guruhlar</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for teacher in teachers %}
+    <tr class="align-middle">
+        <td>{{ forloop.counter }}</td>
+        <td>{{ teacher.name }}</td>
+        <td>{{ teacher.phone }}</td>
+        <td>
+            {% for group in teacher.group_set.all %}
+            <span class="badge badge-sm bg-info">{{forloop.counter}}. {{group.name}}</span>
+            {% endfor %}
+        </td>
+        <td>
+            <a href="{% url 'app:edit-teacher' teacher.id %}">
+                <span class="badge-sm badge bg-success">O'zgartirsh</span>
+            </a>
+            <a href="{% url 'app:delete-teacher' teacher.id %}">
+                <span class="badge-sm badge bg-danger">O'chirish</span>
+            </a>
+        </td>
+    </tr>
+    {% endfor %}
+    <tr class="notfound text-center text-danger">
+        <td colspan="5">Topilmadi \:(</td>
+    </tr>
+    </tbody>
+</table>
+
+{% endblock content %}

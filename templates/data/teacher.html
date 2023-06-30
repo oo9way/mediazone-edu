@@ -1,0 +1,222 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% load my_filter %}
+{% block content %}
+<div class="header mt-5 mb-4 d-flex align-items-center justify-content-between">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% if request.user.profile_set.first.level == 'admin' %}{% url 'app:admin-home' %}{%else%}{% url 'app:admin-home' %}{% endif %}">Bosh sahifa</a></li>
+        <li class="breadcrumb-item">
+            <a href="{% url 'app:casher-teachers'%}">O'qituvchilar</a></li>
+
+        <li class="breadcrumb-item active" aria-current="page">{{teacher.name}}</li>
+      </ol>
+    </nav>
+</div>
+
+<!-- <div class="row">
+    <div class="col-sm-3">
+        
+        <ul class="list-group ">
+            <li class="list-group-item pt-4">
+                <div class="h3">
+                    {{teacher.name}}
+                </div>
+            </li>
+            <li class="list-group-item">Telefon : {{teacher.phone}}</li>
+        </ul>
+    </div>
+</div> -->
+
+<div>
+    <form action="" method="get">
+       <div class="row mb-3">
+        <div class="col-sm-2">
+            <select name="month" class="form-control" required>
+                <option value="{{current_month|date:'m'}}">{{current_month|date:"F"}}</option>
+                <option value="01">Yanvar</option>
+                <option value="02">Fevral</option>
+                <option value="03">Mart</option>
+                <option value="04">Aprel</option>
+                <option value="05">May</option>
+                <option value="06">Iyun</option>
+                <option value="07">Iyul</option>
+                <option value="08">Avgust</option>
+                <option value="09">Sentyabr</option>
+                <option value="10">Oktyabr</option>
+                <option value="11">Noyabr</option>
+                <option value="12">Dekabr</option>
+            </select>
+        </div>
+        <div class="col-sm-1">
+            <button class="btn w-100 btn-success" type="submit">Olish</button>
+        </div>
+       </div>
+    </form>
+</div>
+
+<div class="row">
+    <div class="col-sm-3">
+     
+        <div class="list-group" id="list-tab" role="tablist">
+            <a class="list-group-item pt-4 pb-2" id="list-home-list">
+                <div class="h3">
+                    {{teacher.name}}
+                </div>
+            </a>
+            <a class="list-group-item list-group-item-action" id="list-profile-list" data-bs-toggle="list" href="#groups"
+                role="tab" aria-controls="list-profile">Guruhlar</a>
+            <a class="list-group-item list-group-item-action" id="list-attendace-list" data-bs-toggle="list"
+                href="#list-attendace" role="tab" aria-controls="list-messages">Davomat</a>
+            <a class="list-group-item list-group-item-action" id="list-payment-list" data-bs-toggle="list"
+                href="#list-payment" role="tab" aria-controls="list-payment">Daromad</a>
+
+            <a class="list-group-item list-group-item-action bg-danger text-white" id="list-delete-list" data-bs-toggle="list"
+                href="#list-delete" role="tab" aria-controls="list-delete">O'qituvchini o'chirish</a>
+
+            
+        </div>
+    </div>
+    <div class="col-sm-9">
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="groups" role="tabpanel" aria-labelledby="list-home-list">
+                <div class="card">
+                    <div class="pt-3 px-3">
+                        <h4>Guruhlar</h1>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Guruh nomi</th>
+                                        <th>Talabalar soni</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for group in groups %}
+                                    <tr>
+                                        <td>{{forloop.counter}}</td>
+                                        <td>{{group.name}}</td>
+                                        <td>{{group.students.all.count|intcomma}} ta</td>
+                                        <td>
+                                            <a href="{% url 'app:group' group.id%}" class="btn btn-sm btn-primary">
+                                                Ko'rish
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <p class="text-1 pt-3" style="font-size: 12px;">Umumiy hisobda, {{groups.count}} ta guruhlar, {{students}} ta talabalar</p>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">...asdsad</div>
+            <div class="tab-pane fade" id="list-attendace" role="tabpanel" aria-labelledby="list-attendace-list">
+                <div class="card">
+                    <div class="pt-3 px-3">
+                        <h4>Davomat</h1>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Kun</th>
+                                            <th>Vaqt</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for d in attendace %}
+                                        <tr>
+                                            <td>{{d.date|date:'j-F, l'}}</td>
+                                            <td>{{d.date|date:'G:i'}}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                
+                            <p class="text-1 pt-3" style="font-size: 12px;">Umumiy hisobda, {{current_month|date:'F'}} oyida {{attendace.count}} ta</p>
+                
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="list-payment" role="tabpanel" aria-labelledby="list-payment-list">
+                <div class="card">
+                    <div class="pt-3 px-3">
+                        <h4>Daromad</h1>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Guruh nomi</th>
+                                            <th>Ushbu oydagi tushum</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for group in groups %}
+                                        <tr>
+                                            <td>{{forloop.counter}}</td>
+                                            <td>{{group.name}}</td>
+                                            <td>
+                                                {% if search == None %}
+                                                {{group.id|gs:"current"|intcomma}} so'm
+                                                {% else %}
+                                                {{group.id|gs:search|intcomma}} so'm
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                {% if search == None %}
+                                                <a href="{% url 'app:group-subscription' group.id%}" class="btn btn-sm btn-primary">
+                                                    Ko'rish
+                                                </a>
+                                                {% else %}
+                                                <a href="{% url 'app:group-subscription' group.id%}?month={{search}}" class="btn btn-sm btn-primary">
+                                                    Ko'rish
+                                                </a>
+                                                {% endif %}
+
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="tab-pane fade" id="list-delete" role="tabpanel" aria-labelledby="list-delete-list">
+                <div class="card">
+                    <div class="p-3">
+                        <h4>O'qituvchini o'chirish</h1>
+                        <p class="text-danger">
+                            Siz haqiqatdan ham {{teacher}}ni o'chirmoqchimisiz ?
+                        </p>
+                        <form action="" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="actype" value="delete">
+                            <button class="btn btn-danger" type="submit">O'chirish</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.js"></script>
+
+
+{% endblock content %}

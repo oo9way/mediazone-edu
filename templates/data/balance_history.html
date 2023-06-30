@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load my_filter %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+<div class="header mt-5 mb-4 d-flex align-items-center justify-content-between">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a
+                    href="{% if request.user.profile_set.first.level == 'casher' %}{% url 'app:home' %}{% elif request.user.profile_set.first.level == 'teacher'%}{% url 'app:teacher-home' %}{% endif %}">Bosh
+                    sahifa</a></li>
+            <li class="breadcrumb-item active" aria-current="page">O'qituvchilar</li>
+        </ol>
+    </nav>
+
+    <span>
+        <input type="text" placeholder="Qidirish" id="search" class="search">
+        {% if request.user.profile_set.first.level == 'casher' %}
+        <a href="{% url 'app:datas' %}" class="btn btn-sm btn-success">Guruhlar</a>
+        <a href="{% url 'app:create-teacher' %}" class="btn btn-sm btn-success">O'qituvchi kiritish</a>
+        {% endif %}
+
+    </span>
+</div>
+
+{% if type == 'debt' %}
+<h3>Avanslar</h3>
+{% elif type == 'bonus' %}
+<h3>Bonuslar</h3>
+{% elif type == 'fine' %}
+<h3>Jarimalar</h3>
+{% endif %}
+<table class="table table-responsive table-bordered mt-2">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Miqdori</th>
+            <th>Izoh</th>
+            <th>Sana</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in items %}
+        <tr class="align-middle">
+            <td>{{ forloop.counter }}</td>
+            <td>{{ row.amount|absolute|intcomma }} so'm</td>
+            <td>{{ row.comment }}</td>
+            <td>{{ row.date }}</td>
+        </tr>
+        {% endfor %}
+        <tr class="notfound text-center text-danger">
+            <td colspan="5">Topilmadi \:(</td>
+        </tr>
+    </tbody>
+</table>
+
+<a href="{% url 'app:casher-teachers' %}" class="btn btn-secondary ">Ortga</a>
+
+{% endblock content %}
