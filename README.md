@@ -24,3 +24,6 @@ USERNAME=
 4. Apply migrations (python3 manage.py migrate)
 5. Create Super User (python3 manage.py createsuperuser)
 6. Run app (python3 manage.py runserver)
+
+# Technologies
+Django, Postgresql, Bootstrap
